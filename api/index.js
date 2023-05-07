@@ -3,7 +3,7 @@ const express = require('express')
 const NodeCache = require('node-cache')
 const myCache = new NodeCache({ stdTTL: 600 })
 const app = express()
-const port = 3001
+const port = 3000
 
 async function getData(token, username) {
   const headers = {

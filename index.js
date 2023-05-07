@@ -16,6 +16,14 @@ async function getData(token, username) {
           avatarUrl
           createdAt
           url
+          repositories(last: 3, orderBy: {field: UPDATED_AT, direction: ASC}) {
+            totalCount
+            totalDiskUsage
+            nodes {
+              name
+              url
+            }
+          }
         }
       }`
   }

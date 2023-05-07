@@ -1,4 +1,7 @@
-const { parsed: { TOKEN } } = require('dotenv-safe').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv-safe').config()
+}
+
 const express = require('express')
 const NodeCache = require('node-cache')
 const myCache = new NodeCache({ stdTTL: 600 })
@@ -43,7 +46,7 @@ app.get('/', async (req, res) => {
     return res.send(cachedData)
   }
 
-  const data = await getData(TOKEN, 'garethweaver')
+  const data = await getData(process.env.TOKEN, 'garethweaver')
   myCache.set('git', data)
   console.log(`We fetched from the git api ${new Date().toISOString()}`)
   return res.send(data)

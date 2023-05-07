@@ -1,44 +1,14 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv-safe').config()
-}
-
 const express = require('express')
 const NodeCache = require('node-cache')
+const cors = require('cors')
 const myCache = new NodeCache({ stdTTL: 600 })
+const { TOKEN, CORS_CONFIG } = require('./config.js')
+const getData = require('./fetch.js')
+
 const app = express()
 const port = 3000
 
-async function getData(token, username) {
-  const headers = {
-      'Authorization': `bearer ${token}`,
-  }
-  const body = {
-    query: `query {
-      user(login: "${username}") {
-        name
-        avatarUrl
-        createdAt
-        url
-        repositories(last: 3, orderBy: {field: UPDATED_AT, direction: ASC}) {
-          totalCount
-          totalDiskUsage
-          nodes {
-            name
-            url
-          }
-        }
-      }
-    }`
-  }
-  const response = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers,
-  })
-  return await response.json()
-}
-
-app.get('/', async (req, res) => {
+app.get('/', cors(CORS_CONFIG), async (req, res) => {
   const cachedData = myCache.get('git')
 
   if (cachedData) {
@@ -46,7 +16,7 @@ app.get('/', async (req, res) => {
     return res.send(cachedData)
   }
 
-  const data = await getData(process.env.TOKEN, 'garethweaver')
+  const data = await getData(TOKEN, 'garethweaver')
   myCache.set('git', data)
   console.log(`We fetched from the git api ${new Date().toISOString()}`)
   return res.send(data)

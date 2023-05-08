@@ -9,6 +9,7 @@ const getData = async (token, username) => {
         avatarUrl
         createdAt
         url
+        login
         repositories(last: 3, orderBy: {field: UPDATED_AT, direction: ASC}) {
           totalCount
           totalDiskUsage

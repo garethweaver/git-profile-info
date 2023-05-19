@@ -10,7 +10,7 @@ const getData = async (token, username) => {
         createdAt
         url
         login
-        repositories(last: 3, orderBy: {field: UPDATED_AT, direction: ASC}) {
+        repositories(last: 5, orderBy: {field: UPDATED_AT, direction: ASC}) {
           totalCount
           totalDiskUsage
           nodes {
